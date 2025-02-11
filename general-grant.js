@@ -189,7 +189,10 @@ submitBtn.addEventListener('click', async () => {
     const url = new URL(apiInput.value);
     const context = input1.value;
     url.searchParams.set('context', context);
-    url.searchParams.set('form', await getData());
+    const rawData = await getData();
+    console.log('rawData', rawData.slice(0, 1000));
+    
+    url.searchParams.set('form', rawData.slice(0, 1000));
 
     try {
         submitBtn.disabled = true;
@@ -216,7 +219,10 @@ submitBtn.addEventListener('click', async () => {
         submitBtn.disabled = false;
     }
 });
-
+/**
+ * Get the content of the current tab
+ * @returns {Promise<string>} The content of the current tab
+ */
 function getData() {
     return new Promise((resolve, reject) => {
         chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
